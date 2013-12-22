@@ -96,10 +96,12 @@ let draw_sprite x y (sprite : u8_array) =
   for dy = 0 to sprite_height - 1 do
     let line = sprite.{dy} in
     for dx = 0 to sprite_width - 1 do
-      let x = (x + dx) mod screen_width in
-      let y = (y + dy) mod screen_height in
-      (* If the sprite pixel is white... *)
-      if line land (0b10000000 >> dx) <> 0b00000000 then (
+      let x = x + dx in
+      let y = y + dy in
+      if in_range x (0, screen_width - 1)
+      && in_range y (0, screen_height - 1)
+      && line land (0b10000000 >> dx) <> 0b00000000 then (
+        (* The sprite pixel is white. *)
         match get_pixel (x, y) with
         | Black -> set_pixel (x, y) White
         | White -> set_pixel (x, y) Black; collision := true
