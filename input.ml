@@ -31,11 +31,14 @@ let int_of_keysym keysym =
   n
 
 (** Process the events in the event queue until there are no more. *)
-let rec process_events () =
+let rec process_events ?(paused=false) () =
   match Sdlevent.poll () with
-  | None -> () (* If no event, do nothing. *)
-  | Some Sdlevent.QUIT -> exit 0 (* If quit event, close the program. *)
-  | Some _ -> process_events () (* If some random event, ignore and continue. *)
+  | None when not paused -> ()
+  | None -> assert paused; process_events ~paused:true ()
+  | Some Sdlevent.QUIT -> exit 0
+  | Some (Sdlevent.KEYDOWN ke) when ke.Sdlevent.keysym = Sdlkey.KEY_p ->
+      process_events ~paused:(not paused) () (* If [P] is pressed, (de)pause. *)
+  | Some _ -> process_events ~paused ()
 
 (** Return true if a given key is pressed, false if not. *)
 let is_pressed (n : int) : bool =

@@ -3,12 +3,12 @@ let () =
   Sdl.init [];
   at_exit Sdl.quit;
 
-  (* Setting the window title. *)
-  Sdlwm.set_caption ~title:"BattleCHIP" ~icon:"";
-
   (* Initialization of the Audio and Video modules. *)
   Video.init ();
   Audio.init ();
+
+  (* Setting the window title. *)
+  Sdlwm.set_caption ~title:"BattleCHIP" ~icon:"";
 
   (* If there's not exactly one command line argument, error. *)
   if Array.length Sys.argv - 1 <> 1 then (

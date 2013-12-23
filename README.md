@@ -18,3 +18,5 @@ $ ./battlechip path/to/rom
 ### Controls
 
 You play games using the numpad keys: [0]-[9], [/], [*], [-], [+], [Enter], and [.].
+
+To pause the emulator, press [P].
