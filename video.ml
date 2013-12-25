@@ -84,10 +84,7 @@ let init () =
 
 (** Draw a sprite on screen. *)
 let draw_sprite x y (sprite : u8_array) =
-  (* Check that the coords are in range. *)
-  assert (in_range x (0, screen_width - 1));
-  assert (in_range y (0, screen_height - 1));
-
+  (* Don't check that the coords are in range. They don't have to. *)
   let sprite_width = 8 in
   let sprite_height = Bigarray.Array1.dim sprite in
   assert (in_range sprite_height (0x0, 0xF));
@@ -96,8 +93,9 @@ let draw_sprite x y (sprite : u8_array) =
   for dy = 0 to sprite_height - 1 do
     let line = sprite.{dy} in
     for dx = 0 to sprite_width - 1 do
-      let x = x + dx in
-      let y = y + dy in
+      let x = (x + dx) mod screen_width in (* Modulo needed for BLITZ. *)
+      let y = y + dy in (* No modulo because it would bug BLITZ and PONG. *)
+
       if in_range x (0, screen_width - 1)
       && in_range y (0, screen_height - 1)
       && line land (0b10000000 >> dx) <> 0b00000000 then (
