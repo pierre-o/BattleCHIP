@@ -1,6 +1,8 @@
 BattleCHIP
 ==========
 
+![PONG2 screenshot](http://i.imgur.com/Gb1jl0l.png)
+
 BattleCHIP is a CHIP-8 emulator written in OCaml.
 
 Compilation
