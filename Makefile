@@ -2,9 +2,8 @@
 
 all: battlechip
 
-battlechip: *.ml preprocessor.py
+battlechip: *.ml
 	ocamlopt -o battlechip \
-		-pp "python3 preprocessor.py" \
 		-I +sdl bigarray.cmxa sdl.cmxa sdlmixer.cmxa \
 		font.ml \
 		util.ml \
