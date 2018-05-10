@@ -7,9 +7,6 @@ let () =
   Video.init ();
   Audio.init ();
 
-  (* Setting the window title. *)
-  Sdlwm.set_caption ~title:"BattleCHIP" ~icon:"";
-
   (* If there's not exactly one command line argument, error. *)
   if Array.length Sys.argv - 1 <> 1 then (
     prerr_endline "Usage: ./battlechip path/to/rom";
@@ -19,6 +16,10 @@ let () =
   (* We load the ROM into memory. *)
   let rom = Sys.argv.(1) in
   Memory.init rom;
+
+  (* Setting the window title. *)
+  let title = Filename.basename rom ^ " < BattleCHIP" in
+  Sdlwm.set_caption ~title ~icon:"";
 
   (* Emulation loop. *)
   while true do
