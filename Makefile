@@ -1,9 +1,11 @@
 .PHONY: all clean mrproper
 
-all: battlechip
+EXE = battlechip
 
-battlechip: *.ml
-	ocamlopt -o battlechip \
+all: $(EXE)
+
+$(EXE): *.ml
+	ocamlopt -o $(EXE) \
 		-I +sdl bigarray.cmxa sdl.cmxa sdlmixer.cmxa \
 		font.ml \
 		util.ml \
@@ -19,4 +21,4 @@ clean:
 	rm -f *.cmi *.cmx *.o
 
 mrproper: clean
-	rm -f battlechip
+	rm -f $(EXE)
