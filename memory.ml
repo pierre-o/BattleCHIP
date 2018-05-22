@@ -55,7 +55,7 @@ let init (rom : string) =
 
   (* Load the font into RAM. *)
   for n = 0x0 to 0xF do
-    let sprite = Font.sprite n in
+    let sprite = Font.sprite.(n) in
     let sprite_height = Array.length sprite in
     assert (sprite_height = 5);
     for i = 0 to sprite_height - 1 do
