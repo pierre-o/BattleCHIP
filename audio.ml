@@ -11,7 +11,7 @@ let init () =
 
   (* Load the beep sound. *)
   beep := Some (Sdlmixer.loadWAV "beep.wav");
-  at_exit (fun () -> Sdlmixer.free_chunk !?beep);
+  at_exit (fun () -> Sdlmixer.free_chunk (unwrap beep));
 
   (* Allocate a channel for the beep sound. *)
   let _ = Sdlmixer.allocate_channels 1 in
@@ -28,4 +28,4 @@ let play_sound sound_timer =
     ~channel:0 (* The first and only channel. *)
     ~loops:(-1) (* Repeat the sound indefinitely. *)
     ~ticks:(float_of_int sound_timer *. (1. /. 60.)) (* Sound duration in ms. *)
-    !?beep (* The beep sound. *)
+    (unwrap beep) (* The beep sound. *)

@@ -12,8 +12,8 @@ type color =
 | White
 
 let int32_of_color = function
-| Black -> Sdlvideo.map_RGB !?screen Sdlvideo.black
-| White -> Sdlvideo.map_RGB !?screen Sdlvideo.white
+| Black -> Sdlvideo.map_RGB (unwrap screen) Sdlvideo.black
+| White -> Sdlvideo.map_RGB (unwrap screen) Sdlvideo.white
 
 let color_of_int32 (color : int32) =
   if color = int32_of_color Black then Black
@@ -27,12 +27,12 @@ let get_pixel (x, y) : color =
   assert (in_range x (0, screen_width - 1));
   assert (in_range y (0, screen_height - 1));
 
-  let color = Sdlvideo.get_pixel !?screen ~x:(x * k) ~y:(y * k) in
+  let color = Sdlvideo.get_pixel (unwrap screen) ~x:(x * k) ~y:(y * k) in
 
   (* Ensure that the actual pixels are all the same color. *)
   for x = x * k to (x + 1) * k - 1 do
     for y = y * k to (y + 1) * k - 1 do
-      assert (Sdlvideo.get_pixel !?screen ~x ~y = color)
+      assert (Sdlvideo.get_pixel (unwrap screen) ~x ~y = color)
     done
   done;
 
@@ -47,19 +47,19 @@ let set_pixel (x, y) (color : color) =
 
   (* Color the pixel. *)
   let rect = Sdlvideo.rect ~x:(x * k) ~y:(y * k) ~w:k ~h:k in
-  Sdlvideo.fill_rect ~rect !?screen (int32_of_color color);
+  Sdlvideo.fill_rect ~rect (unwrap screen) (int32_of_color color);
 
   (* Check that the virtual pixel is indeed the right color. *)
   assert (get_pixel (x, y) = color)
 
 
 (** Flip the double buffer screens. *)
-let update_screen () = Sdlvideo.flip !?screen
+let update_screen () = Sdlvideo.flip (unwrap screen)
 
 
 (** Erase the screen. *)
 let clear_screen () =
-  Sdlvideo.fill_rect !?screen (int32_of_color Black);
+  Sdlvideo.fill_rect (unwrap screen) (int32_of_color Black);
   update_screen ();
 
   (* Check that the screen is inded totally black. *)
@@ -98,7 +98,7 @@ let draw_sprite x y (sprite : u8_array) =
 
       if in_range x (0, screen_width - 1)
       && in_range y (0, screen_height - 1)
-      && line land (0b10000000 >> dx) <> 0b00000000 then (
+      && line land (0b10000000 lsr dx) <> 0b00000000 then (
         (* The sprite pixel is white. *)
         match get_pixel (x, y) with
         | Black -> set_pixel (x, y) White

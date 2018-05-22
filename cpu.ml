@@ -15,12 +15,12 @@ let add_vy_to_vx x y =
 let shift_right x =
   let lsb = v.{x} land 0b00000001 in
   v.{0xF} <- lsb;
-  v.{x} <- v.{x} >> 1
+  v.{x} <- v.{x} lsr 1
 
 let shift_left x =
-  let msb = (v.{x} land 0b10000000) >> 7 in
+  let msb = (v.{x} land 0b10000000) lsr 7 in
   v.{0xF} <- msb;
-  v.{x} <- v.{x} << 1
+  v.{x} <- v.{x} lsl 1
 
 let skip_if_pressed x =
   if Input.is_pressed v.{x} then
@@ -70,7 +70,7 @@ let sub x b a =
 let decode_execute opcode =
   let nnn = opcode land 0x0FFF in
   let kk = opcode land 0x00FF in
-  let get_nibble i = (opcode >> (i * 4)) land 0x000F in
+  let get_nibble i = (opcode lsr (i * 4)) land 0x000F in
   let nibbles = Array.init 4 (fun i -> get_nibble (3 - i)) in
   match nibbles with
   | [|0x0; 0x0; 0xE; 0x0|] -> Video.clear_screen ()            (* Clear the screen.             *)

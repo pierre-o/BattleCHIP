@@ -36,7 +36,7 @@ let skip () = pc := !pc + 2
 let fetch () =
   let msb = ram.{!pc} in
   let lsb = ram.{!pc + 1} in
-  (msb << 8) lor lsb
+  (msb lsl 8) lor lsb
 
 (** Return the location in memory of a given character's font sprite. *)
 let char_addr n =
@@ -60,7 +60,7 @@ let init (rom : string) =
     assert (sprite_height = 5);
     for i = 0 to sprite_height - 1 do
       assert (in_range sprite.(i) (0b0000, 0b1111));
-      let row = sprite.(i) << 4 in
+      let row = sprite.(i) lsl 4 in
 
       let i' = char_addr n + i in
       assert (in_range i' (0x000, 0x200 - 1));

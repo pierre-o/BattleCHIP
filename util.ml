@@ -1,11 +1,9 @@
 open Bigarray
 
-let (<<) = (lsl)
-let (>>) = (lsr)
 let int_of_bool x = if x then 1 else 0
 let in_range n (a, b) = a <= n && n <= b
 
-let (!?) x =
+let unwrap x =
   match !x with
   | None -> assert false
   | Some x -> x
